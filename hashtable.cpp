@@ -3,9 +3,9 @@
 
 using namespace std;
 
-void addStudent(Node* &headNode, Student* newStudent);
-void printStudent(Node* headNode);
-void deleteStudent(Node* &headNode, int myID); 
+// void addStudent(Node* &headNode, Student* newStudent);
+// void printStudent(Node* headNode);
+// void deleteStudent(Node* &headNode, int myID); 
 
 int main() {
   char input[20];
@@ -22,14 +22,9 @@ int main() {
     if(strcmp(input, "ADD") == 0){
       Student* newStudent = new Student();
       cout << "Enter the student's first name:" << endl; 
-      cin >> newStudent->getFirstName();
       cout << "Enter the student's last name:" << endl; 
-      cin >> newStudent->getLastName();
       cout << "Enter the student's ID:" << endl;
-      cin >> myID;
-      newStudent->setID(myID);
       cout << "Enter the student's GPA:" << endl;
-      cin >> myGPA;
       
     } else if(strcmp(input, "DELETE") == 0){   
 
@@ -45,6 +40,7 @@ int main() {
   return 0;
 }
 
+/*
 void addStudent(Node* &headNode, Student* newStudent) {
    
 }
@@ -56,3 +52,4 @@ void printStudent(Node* headNode) {
 void deleteStudent(Node* &headNode, int myID) {
 
 }
+*/
