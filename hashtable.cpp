@@ -20,7 +20,7 @@ int main() {
     cin.ignore(10000, '\n');
     
     if(strcmp(input, "ADD") == 0){
-      Student* newStudent = new Student();
+      // Student* newStudent = new Student();
       cout << "Enter the student's first name:" << endl; 
       cout << "Enter the student's last name:" << endl; 
       cout << "Enter the student's ID:" << endl;
