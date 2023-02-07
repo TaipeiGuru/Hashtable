@@ -6,6 +6,7 @@
 using namespace std;
 
 void addStudent(Node* myList[100], int hashFunctionValue, Student* newStudent);
+int hashFunction(int id);
 // void printStudent(Node* headNode);
 // void deleteStudent(Node* &headNode, int myID); 
 
