@@ -10,6 +10,7 @@ using namespace std;
 int main() {
   char input[20];
   bool active = true;
+  Node* list[100];
   cout << "Welcome to Hashtable!" << endl; 
   
   // While loop to keep track of game running
