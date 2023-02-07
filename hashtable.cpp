@@ -40,6 +40,7 @@ int main() {
       cin >> myGPA;
       newStudent->setGPA(myGPA);
       hash = hashFunction(myID);
+      cout << hash << endl;
       addStudent(list, hash, newStudent);
     } else if(strcmp(input, "DELETE") == 0){   
 
@@ -90,6 +91,7 @@ int hashFunction(int id) {
 void printStudent(Node* myList[100]) {
   for(int i = 0; i<100; i++) {
     if(myList[i] != NULL) {
+      cout << i << endl;
       myList[i]->getStudent()->printStudent();
     }
   }
