@@ -7,7 +7,7 @@ using namespace std;
 
 void addStudent(Node* myList[100], int hashFunctionValue, Student* newStudent);
 int hashFunction(int id);
-// void printStudent(Node* headNode);
+void printStudent(Node* myList[100]);
 // void deleteStudent(Node* &headNode, int myID); 
 
 int main() {
@@ -44,7 +44,7 @@ int main() {
     } else if(strcmp(input, "DELETE") == 0){   
 
     } else if(strcmp(input, "PRINT") == 0){
-
+      printStudent(myList);
     } else if(strcmp(input, "QUIT") == 0){
       active = false;
     } else {
@@ -86,11 +86,15 @@ int hashFunction(int id) {
   return value;
 }
 
-/*
-void printStudent(Node* headNode) {
- 
-}
 
+void printStudent(Node* myList[100]) {
+  for(int i = 0; i<100; i++) {
+    if(myList[i] != NULL) {
+      myList[hashFunctionValue]->getStudent()->printStudent();
+    }
+  }
+}
+/*
 void deleteStudent(Node* &headNode, int myID) {
 
 }
