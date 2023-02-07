@@ -7,7 +7,7 @@ using namespace std;
 
 void addStudent(Node* myList[100], int hashFunctionValue, Student* newStudent);
 int hashFunction(int id);
-void printStudent(Node* myList[100]);
+void printStudent(Node* myList[100], Node* headNode);
 // void deleteStudent(Node* &headNode, int myID); 
 
 int main() {
@@ -17,6 +17,7 @@ int main() {
   int myID;
   float myGPA;
   int hash;
+  Node* headNode;
   
   cout << "Welcome to Hashtable!" << endl; 
   
@@ -45,7 +46,7 @@ int main() {
     } else if(strcmp(input, "DELETE") == 0){   
 
     } else if(strcmp(input, "PRINT") == 0){
-      printStudent(list);
+      printStudent(list, headNode);
     } else if(strcmp(input, "QUIT") == 0){
       active = false;
     } else {
@@ -88,13 +89,15 @@ int hashFunction(int id) {
 }
 
 
-void printStudent(Node* myList[100]) {
-  for(int i = 0; i<100; i++) {
+void printStudent(Node* myList[100], Node* headNode) {
+  headNode = myList[22]; 
+  headNode->getStudent()->printStudent();
+  /*for(int i = 0; i<100; i++) {
     if(myList[i] != NULL) {
       cout << i << endl;
       myList[i]->getStudent()->printStudent();
     }
-  }
+    } */
 }
 /*
 void deleteStudent(Node* &headNode, int myID) {
