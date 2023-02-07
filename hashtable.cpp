@@ -44,7 +44,7 @@ int main() {
     } else if(strcmp(input, "DELETE") == 0){   
 
     } else if(strcmp(input, "PRINT") == 0){
-      printStudent(myList);
+      printStudent(list);
     } else if(strcmp(input, "QUIT") == 0){
       active = false;
     } else {
@@ -90,7 +90,7 @@ int hashFunction(int id) {
 void printStudent(Node* myList[100]) {
   for(int i = 0; i<100; i++) {
     if(myList[i] != NULL) {
-      myList[hashFunctionValue]->getStudent()->printStudent();
+      myList[i]->getStudent()->printStudent();
     }
   }
 }
