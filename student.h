@@ -1,3 +1,6 @@
+// student.h file for LinkedLists 2
+
+// Imports
 #include <iostream>
 #ifndef STUDENT_H
 #define STUDENT_H
@@ -5,18 +8,26 @@
 using namespace std;
 
 class Student {
+ // declaring functions
  public:
   // Constructor.
   Student();
   // Destructor.
   ~Student();
-  // Setting name to a passed-in char array.
-  void setName(char* input);
   // Printing the name.
-  void printName();
+  void printStudent();
+  void setID(int myId);
+  void setGPA(float myGPA);
+  int getID();;
+  float getGPA();
+  char* getFirstName();
+  char* getLastName();
  private:
-  // Student name.
-  char name[10];
+  // Student details.
+  char firstName[20];
+  char lastName[20];
+  int id;
+  float gpa;
 };
 
 #endif
