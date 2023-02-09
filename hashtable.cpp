@@ -18,7 +18,8 @@ int main() {
   float myGPA;
   int hash;
   Node* headNode;
-
+  
+  // Sets each object in the array to null. Help with this from https://stackoverflow.com/questions/4178804/how-to-see-if-an-element-is-null-in-an-array-in-c
   for(int i = 0; i<100; i++) {
     list[i] = NULL;
   }
@@ -63,27 +64,19 @@ int main() {
 
 void addStudent(Node* myList[100], int hashFunctionValue, Student* newStudent) {
   if(myList[hashFunctionValue] == NULL) {
-    Node* headNode = new Node(newStudent);
-    myList[hashFunctionValue] = headNode;
+    Node* tempNode = new Node(newStudent);
+    myList[hashFunctionValue] = tempNode;
     cout << "Student added." << endl;
-    headNode->getStudent()->printStudent();
-  } /*else if(headNode->getStudent()->getID() > newStudent->getID()) {
-    Node* tempNode = headNode;
-    headNode = new Node(newStudent);
-    headNode->setNext(tempNode);
+  } else if(myList[hashFunctionValue]->getNext() == NULL) {
+    Node* tempNode = new Node(newStudent);
+    myList[hashFunctionValue]->setNext(tempNode);
     cout << "Student added." << endl;
-  } else if(headNode->getNext() == NULL) {
-    Node* tempNode4 = new Node(newStudent);
-    headNode->setNext(tempNode4);
+  } else if(myList[hashFunctionValue]->getNext()->getNext() == NULL) {
+    Node* tempNode = new Node(newStudent);
+    myList[hashFunctionValue]->getNext()->setNext(tempNode);
     cout << "Student added." << endl;
-  } else if(newStudent->getID() <= headNode->getNext()->getStudent()->getID() && newStudent->getID() >= headNode->getStudent()->getID()) {
-    Node* tempNode2 = new Node(newStudent);
-    tempNode2->setNext(headNode->getNext());
-    headNode->setNext(tempNode2);
-    cout << "Student added." << endl;
-  } else {
-    Node* tempNode3 = headNode->getNext();
-    addStudent(tempNode3, newStudent);  
+  } /*else {
+      
   } */
 }
       
