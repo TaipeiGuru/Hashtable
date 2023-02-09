@@ -79,10 +79,10 @@ Node** addStudent(Node* myList[100], int hashFunctionValue, Student* newStudent)
     cout << "Student added." << endl;
     return myList;
   } else {
-    int newSize = 2*sizeof(myList)/sizeof(list[0]);
+    int newSize = 2*sizeof(myList)/sizeof(myList[0]);
     Node* newList = new Node*[newSize];
-    int* temp = list;
-    list = newList;
+    int* temp = myList;
+    myList = newList;
     delete[] temp;
     
     Node* tempNode = new Node(newStudent);
