@@ -18,6 +18,10 @@ int main() {
   float myGPA;
   int hash;
   Node* headNode;
+
+  for(int i = 0; i<100; i++) {
+    list[i] = NULL;
+  }
   
   cout << "Welcome to Hashtable!" << endl; 
   
@@ -41,7 +45,6 @@ int main() {
       cin >> myGPA;
       newStudent->setGPA(myGPA);
       hash = hashFunction(myID);
-      cout << hash << endl;
       addStudent(list, hash, newStudent);
     } else if(strcmp(input, "DELETE") == 0){   
 
@@ -59,10 +62,11 @@ int main() {
 
 
 void addStudent(Node* myList[100], int hashFunctionValue, Student* newStudent) {
-   if(myList[hashFunctionValue] == NULL) {
+  if(myList[hashFunctionValue] == NULL) {
     Node* headNode = new Node(newStudent);
     myList[hashFunctionValue] = headNode;
     cout << "Student added." << endl;
+    headNode->getStudent()->printStudent();
   } /*else if(headNode->getStudent()->getID() > newStudent->getID()) {
     Node* tempNode = headNode;
     headNode = new Node(newStudent);
@@ -90,14 +94,11 @@ int hashFunction(int id) {
 
 
 void printStudent(Node* myList[100], Node* headNode) {
-  headNode = myList[22]; 
-  headNode->getStudent()->printStudent();
-  /*for(int i = 0; i<100; i++) {
+  for(int i = 0; i<100; i++) {
     if(myList[i] != NULL) {
-      cout << i << endl;
       myList[i]->getStudent()->printStudent();
     }
-    } */
+  } 
 }
 /*
 void deleteStudent(Node* &headNode, int myID) {
