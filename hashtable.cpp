@@ -5,7 +5,7 @@
 
 using namespace std;
 
-void addStudent(Node* myList[100], int hashFunctionValue, Student* newStudent);
+Node** addStudent(Node* myList[100], int hashFunctionValue, Student* newStudent);
 int hashFunction(int id);
 void printStudent(Node* myList[100], Node* headNode);
 // void deleteStudent(Node* &headNode, int myID); 
@@ -62,21 +62,24 @@ int main() {
 }
 
 
-void addStudent(Node* myList[100], int hashFunctionValue, Student* newStudent) {
+Node** addStudent(Node* myList[100], int hashFunctionValue, Student* newStudent) {
   if(myList[hashFunctionValue] == NULL) {
     Node* tempNode = new Node(newStudent);
     myList[hashFunctionValue] = tempNode;
     cout << "Student added." << endl;
+	  return myList;
   } else if(myList[hashFunctionValue]->getNext() == NULL) {
     Node* tempNode = new Node(newStudent);
     myList[hashFunctionValue]->setNext(tempNode);
     cout << "Student added." << endl;
+    return myList;
   } else if(myList[hashFunctionValue]->getNext()->getNext() == NULL) {
     Node* tempNode = new Node(newStudent);
     myList[hashFunctionValue]->getNext()->setNext(tempNode);
     cout << "Student added." << endl;
+    return myList;
   } else {
-    int newSize = 2*sizeof(list)/sizeof(list[0]);
+    int newSize = 2*sizeof(myList)/sizeof(list[0]);
     Node* newList = new Node*[newSize];
     int* temp = list;
     list = newList;
