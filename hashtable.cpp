@@ -90,6 +90,12 @@ void printStudent(Node* myList[100], Node* headNode) {
   for(int i = 0; i<100; i++) {
     if(myList[i] != NULL) {
       myList[i]->getStudent()->printStudent();
+      if(myList[i]->getNext() != NULL) {
+        myList[i]->getNext()->getStudent()->printStudent();
+	if(myList[i]->getNext()->getNext() != NULL) {
+	  myList[i]->getNext()->getNext()->getStudent()->printStudent();
+	}
+      }
     }
   } 
 }
