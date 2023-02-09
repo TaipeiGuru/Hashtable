@@ -75,9 +75,17 @@ void addStudent(Node* myList[100], int hashFunctionValue, Student* newStudent) {
     Node* tempNode = new Node(newStudent);
     myList[hashFunctionValue]->getNext()->setNext(tempNode);
     cout << "Student added." << endl;
-  } /*else {
-      
-  } */
+  } else {
+    int newSize = 2*sizeof(list)/sizeof(list[0]);
+    Node* newList = new Node*[newSize];
+    int* temp = list;
+    list = newList;
+    delete[] temp;
+    
+    Node* tempNode = new Node(newStudent);
+    myList[199] = tempNode;
+    cout << "Student added." << endl;
+  } 
 }
       
 int hashFunction(int id) {
