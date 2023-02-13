@@ -46,7 +46,7 @@ int main() {
       cin >> myGPA;
       newStudent->setGPA(myGPA);
       hash = hashFunction(myID);
-      addStudent(list, hash, newStudent);
+      list = addStudent(list, hash, newStudent);
     } else if(strcmp(input, "DELETE") == 0){   
 
     } else if(strcmp(input, "PRINT") == 0){
@@ -77,7 +77,8 @@ void addStudent(Node* myList[100], int hashFunctionValue, Student* newStudent) {
     cout << "Student added." << endl;
   } else {
     int newSize = 2*sizeof(myList)/sizeof(myList[0]);
-    Node* newList = new Node[newSize];
+    cout << newSize << endl;
+    Node* myList
     int* temp = myList;
     myList = newList;
     delete[] temp;
