@@ -5,15 +5,17 @@
 
 using namespace std;
 
-Node** addStudent(Node* myList[100], int hashFunctionValue, Student* newStudent);
-int hashFunction(int id);
-void printStudent(Node* myList[100], Node* headNode);
+void addStudent(Node** myList, int hashFunctionValue, Student* newStudent);
+int hashFunction(int id, int listSize);
+void printStudent(Node** myList, Node* headNode);
+bool collisionChecker(Node** list, int hashFunctionValue);
 // void deleteStudent(Node* &headNode, int myID); 
 
 int main() {
   char input[20];
   bool active = true;
-  Node* list[100];
+  int listSize = 100;
+  Node** list;
   int myID;
   float myGPA;
   int hash;
@@ -45,7 +47,34 @@ int main() {
       cout << "Enter the student's GPA:" << endl;
       cin >> myGPA;
       newStudent->setGPA(myGPA);
-      hash = hashFunction(myID);
+      hash = hashFunction(myID, listSize);
+
+      if(collisionChecker(list, hash) == true) {
+	Node* temp[listSize];
+	for(int j = 0; j < listSize; j++) {
+	  temp[j] = list[j];
+	}
+	int newListSize = listSize * 2;
+	list = new Node*[newListSize];
+
+	hash = hashFunction(myID, newListSize);
+	for(int m = 0; m < listSize; m++) {
+	  if(temp[m] != NULL) {
+	    list[m] = temp[m];
+	    if(temp[m]->getNext() != NULL) {
+	      list[m]->setNext(temp[m]->getNext());
+	      if(temp[m]->getNext()->getNext() != NULL) {
+		list[m]->getNext()->setNext(temp[m]->getNext()->getNext());
+	      }
+	    }
+	  } else {
+	    list[m] = NULL;
+	  }
+	}
+	
+	delete[] temp;
+	listSize = newListSize;
+      }
       addStudent(list, hash, newStudent);
     } else if(strcmp(input, "DELETE") == 0){   
 
@@ -62,42 +91,45 @@ int main() {
 }
 
 
-Node** addStudent(Node* myList[100], int hashFunctionValue, Student* newStudent) {
+void addStudent(Node** myList, int hashFunctionValue, Student* newStudent) {
   if(myList[hashFunctionValue] == NULL) {
     Node* tempNode = new Node(newStudent);
     myList[hashFunctionValue] = tempNode;
     cout << "Student added." << endl;
-	  return myList;
   } else if(myList[hashFunctionValue]->getNext() == NULL) {
     Node* tempNode = new Node(newStudent);
     myList[hashFunctionValue]->setNext(tempNode);
     cout << "Student added." << endl;
-    return myList;
   } else if(myList[hashFunctionValue]->getNext()->getNext() == NULL) {
     Node* tempNode = new Node(newStudent);
     myList[hashFunctionValue]->getNext()->setNext(tempNode);
     cout << "Student added." << endl;
-    return myList;
   } else {
     int newSize = 2*sizeof(myList)/sizeof(myList[0]);
-    Node* newList = new Node[newSize];
-    int* temp = myList;
-    myList = newList;
-    delete[] temp;
+    Node* newList[newSize];
+
+    for(int j = 0; j<newSize; j++) {
+      if(myList[j] != NULL) {
+	newList[j] = myList[j];
+      }
+    }
+    
+    delete[] myList;
     
     Node* tempNode = new Node(newStudent);
-    myList[199] = tempNode;
+    int newValue = hashFunction(tempNode->getStudent()->getID(), newSize); 
+    myList[newValue] = tempNode;
     cout << "Student added." << endl;
   } 
 }
       
-int hashFunction(int id) {
-  int value = id % 100;
+int hashFunction(int id, int listSize) {
+  int value = id % listSize;
   return value;
 }
 
 
-void printStudent(Node* myList[100], Node* headNode) {
+void printStudent(Node** myList, Node* headNode) {
   for(int i = 0; i<100; i++) {
     if(myList[i] != NULL) {
       myList[i]->getStudent()->printStudent();
@@ -115,3 +147,14 @@ void deleteStudent(Node* &headNode, int myID) {
 
 }
 */
+
+bool collisionChecker(Node** list, int hashFunctionValue) {
+  if(list[hashFunctionValue] != NULL) {
+    if(list[hashFunctionValue]->getNext() != NULL) {
+      if(list[hashFunctionValue]->getNext()->getNext() != NULL) {
+	return true;
+      }
+    }
+  }
+  return false;
+}
