@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <cstring>
 #include "node.h"
@@ -7,9 +8,9 @@ using namespace std;
 
 void addStudent(Node** myList, int hashFunctionValue, Student* newStudent);
 int hashFunction(int id, int listSize);
-void printStudent(Node** myList, Node* headNode);
+void printStudent(Node** myList, int listSize);
 bool collisionChecker(Node** list, int hashFunctionValue);
-void reHash(int listSize, int newListSize, Node** list, Node** temp, int hash, int myID, Student* newStudent);
+void reHash(int listSize, int newListSize, Node** &list, Node** temp);
 // void deleteStudent(Node* &headNode, int myID); 
 
 int main() {
@@ -49,22 +50,28 @@ int main() {
       cin >> myGPA;
       newStudent->setGPA(myGPA);
       hash = hashFunction(myID, listSize);
-
+      
       if(collisionChecker(list, hash) == true) {
-	      int newListSize = listSize * 2;
-	      Node** temp = new Node*[newListSize];
+	int newListSize = listSize * 2;
+	Node** temp = new Node*[newListSize];
         
         for(int j = 0; j < newListSize; j++) {
           temp[j] = NULL;
         }
 
-        reHash(listSize, newListSize, list, temp, hash, myID, newStudent);
+        reHash(listSize, newListSize, list, temp);
+	hash = hashFunction(myID, newListSize);
+	addStudent(list, hash, newStudent);
+	listSize = newListSize;
+      } else {
+	addStudent(list, hash, newStudent);
+	cout << "Student added." << endl;
       }
-      addStudent(list, hash, newStudent);
+
     } else if(strcmp(input, "DELETE") == 0){   
 
     } else if(strcmp(input, "PRINT") == 0){
-      printStudent(list, headNode);
+      printStudent(list, listSize);
     } else if(strcmp(input, "QUIT") == 0){
       active = false;
     } else {
@@ -80,32 +87,32 @@ void addStudent(Node** myList, int hashFunctionValue, Student* newStudent) {
   if(myList[hashFunctionValue] == NULL) {
     Node* tempNode = new Node(newStudent);
     myList[hashFunctionValue] = tempNode;
-    cout << "Student added." << endl;
   } else if(myList[hashFunctionValue]->getNext() == NULL) {
+    cout << "expected" << endl;
     Node* tempNode = new Node(newStudent);
+    cout << hashFunctionValue << endl;
     myList[hashFunctionValue]->setNext(tempNode);
-    cout << "Student added." << endl;
   } else if(myList[hashFunctionValue]->getNext()->getNext() == NULL) {
     Node* tempNode = new Node(newStudent);
     myList[hashFunctionValue]->getNext()->setNext(tempNode);
-    cout << "Student added." << endl;
   }  
 }
 
-void reHash(int listSize, int newListSize, Node** list, Node** temp, int hash, int myID, Student* newStudent) {
+void reHash(int listSize, int newListSize, Node** &list, Node** temp) {
+  int hash;
   for (int i = 0; i < listSize; i++) {
     if (list[i] != NULL) {
       Node* tempNode = list[i];
       while (tempNode != NULL) {
-        hash = hashFunction(myID, newListSize);
-        addStudent(temp, hash, newStudent);
+        hash = hashFunction(tempNode->getStudent()->getID(), newListSize);
+	cout << hash << endl;
+        addStudent(temp, hash, tempNode->getStudent());
         tempNode = tempNode->getNext();
       }
     }
   }
-  delete[] &list;
+  delete[] list;
   list = temp;
-	listSize = newListSize;
 }
 
 int hashFunction(int id, int listSize) {
@@ -114,8 +121,8 @@ int hashFunction(int id, int listSize) {
 }
 
 
-void printStudent(Node** myList, Node* headNode) {
-  for(int i = 0; i<100; i++) {
+void printStudent(Node** myList, int listSize) {
+  for(int i = 0; i<listSize; i++) {
     if(myList[i] != NULL) {
       myList[i]->getStudent()->printStudent();
       if(myList[i]->getNext() != NULL) {
