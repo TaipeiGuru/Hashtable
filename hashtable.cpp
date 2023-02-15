@@ -11,7 +11,7 @@ int hashFunction(int id, int listSize);
 void printStudent(Node** myList, int listSize);
 bool collisionChecker(Node** list, int hashFunctionValue);
 void reHash(int listSize, int newListSize, Node** &list, Node** temp);
-// void deleteStudent(Node* &headNode, int myID); 
+void deleteStudent(Node** myList, int hashFunctionValue, int myID); 
 
 int main() {
   char input[20];
@@ -134,11 +134,23 @@ void printStudent(Node** myList, int listSize) {
     }
   } 
 }
-/*
-void deleteStudent(Node* &headNode, int myID) {
 
+
+void deleteStudent(Node** myList, int hashFunctionValue, int myID) { 
+  if(myList[hashFunctionValue] == NULL) {
+    cout << "There is no student that matches this ID." << endl;
+  } else {
+    if(myList[hashFunctionValue]->getStudent()->getID() == myID) {
+      cout << "expected" << endl;
+      Node* tempNode = new Node(newStudent);
+      cout << hashFunctionValue << endl;
+      myList[hashFunctionValue]->setNext(tempNode);
+    } else if(myList[hashFunctionValue]->getNext()->getNext() == NULL) {
+      Node* tempNode = new Node(newStudent);
+      myList[hashFunctionValue]->getNext()->setNext(tempNode);
+    } 
+  }
 }
-*/
 
 bool collisionChecker(Node** list, int hashFunctionValue) {
   if(list[hashFunctionValue] != NULL) {
