@@ -92,6 +92,7 @@ int main() {
 
 
 void addStudent(Node** myList, int hashFunctionValue, Student* newStudent) {
+  cout << "hi" << endl;
   if(myList[hashFunctionValue] == NULL) {
     Node* tempNode = new Node(newStudent);
     myList[hashFunctionValue] = tempNode;
