@@ -11,7 +11,8 @@ int hashFunction(int id, int listSize);
 void printStudent(Node** myList, int listSize);
 bool collisionChecker(Node** list, int hashFunctionValue);
 void reHash(int listSize, int newListSize, Node** &list, Node** temp);
-void deleteStudent(Node** myList, int hashFunctionValue, int myID); 
+void deleteStudent(Node** &myList, Node* headNode, int hashFunctionValue, int myID); 
+void generateRandom(Node** &myList, int listSize, int studentNum);
 
 int main() {
   char input[20];
@@ -32,7 +33,7 @@ int main() {
   
   // While loop to keep track of game running
   while(active == true) {
-    cout << "Your options are \"ADD,\" \"DELETE,\" \"PRINT,\" and \"QUIT.\"" << endl;
+    cout << "Your options are \"ADD,\" \"DELETE,\" \"PRINT,\" \"RANDOM,\" and \"QUIT.\"" << endl;
     cin >> input;
     cin.clear();
     cin.ignore(10000, '\n');
@@ -68,12 +69,26 @@ int main() {
 	cout << "Student added." << endl;
       }
 
-    } else if(strcmp(input, "DELETE") == 0){   
-
+    } else if(strcmp(input, "DELETE") == 0){
+      int deleteID;
+      cout << "What is the ID of the user you'd like to delete?" << endl;
+      cin >> deleteID;
+      hash = hashFunction(deleteID, listSize);
+      if(list[hash] == NULL) {
+        cout << "There is no student that matches this ID." << endl;
+      } else {
+        Node* headNode = list[hash];
+        deleteStudent(list, headNode, hash, deleteID);
+      }
     } else if(strcmp(input, "PRINT") == 0){
       printStudent(list, listSize);
     } else if(strcmp(input, "QUIT") == 0){
       active = false;
+    } else if(strcmp(input, "RANDOM") == 0){
+      int studentNum; 
+      cout << "How many students would you like to generate?" << endl;
+      cin >> studentNum;
+      generateRandom(myList, listSize, studentNum);
     } else {
       cout << "Invalid input." << endl;
     }
@@ -135,20 +150,30 @@ void printStudent(Node** myList, int listSize) {
   } 
 }
 
-
-void deleteStudent(Node** myList, int hashFunctionValue, int myID) { 
-  if(myList[hashFunctionValue] == NULL) {
-    cout << "There is no student that matches this ID." << endl;
+void deleteStudent(Node** &myList, Node* headNode, int hashFunctionValue, int myID) { 
+  if(headNode->getStudent()->getID() == myID && headNode->getNext() == NULL) {
+    delete headNode;
+    myList[hashFunctionValue] = NULL;
+    cout << "Student deleted." << endl;
+  } else if (headNode->getNext()->getStudent()->getID() == myID && headNode->getNext()->getNext() != NULL) {
+    Node* tempNode = headNode->getNext();
+    headNode->setNext(headNode->getNext()->getNext());
+    delete tempNode;
+    cout << "Student deleted." << endl;
+  } else if(headNode->getNext()->getStudent()->getID() == myID && headNode->getNext()->getNext() == NULL) {
+    Node* tempNode2 = headNode->getNext();
+    headNode->setNext(NULL);
+    delete tempNode2;
+    cout << "Student deleted." << endl;
+  } else if (headNode->getStudent()->getID() == myID && headNode->getNext() != NULL) {
+    Node* tempNode3 = headNode;
+    headNode = headNode->getNext();
+    myList[hashFunctionValue] = headNode;
+    delete tempNode3;
+    cout << "Student deleted." << endl;
   } else {
-    if(myList[hashFunctionValue]->getStudent()->getID() == myID) {
-      cout << "expected" << endl;
-      Node* tempNode = new Node(newStudent);
-      cout << hashFunctionValue << endl;
-      myList[hashFunctionValue]->setNext(tempNode);
-    } else if(myList[hashFunctionValue]->getNext()->getNext() == NULL) {
-      Node* tempNode = new Node(newStudent);
-      myList[hashFunctionValue]->getNext()->setNext(tempNode);
-    } 
+    Node* tempNode4 = headNode->getNext();
+    deleteStudent(myList, tempNode4, hashFunctionValue, myID);   
   }
 }
 
@@ -161,4 +186,8 @@ bool collisionChecker(Node** list, int hashFunctionValue) {
     }
   }
   return false;
+}
+
+void generateRandom(Node** &myList, int listSize, int studentNum) {
+  
 }
