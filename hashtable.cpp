@@ -89,7 +89,7 @@ int main() {
       int studentNum; 
       cout << "How many students would you like to generate?" << endl;
       cin >> studentNum;
-      generateRandom(myList, listSize, studentNum);
+      generateRandom(list, listSize, studentNum);
     } else {
       cout << "Invalid input." << endl;
     }
@@ -191,14 +191,35 @@ bool collisionChecker(Node** list, int hashFunctionValue) {
 
 // File-reading help from https://cplusplus.com/forum/beginner/8388/
 void generateRandom(Node** &myList, int listSize, int studentNum) {
-  ifstream myReadFile;
-  myReadFile.open("first.txt");
+  ifstream firstNameFile;
+  ifstream lastNameFile;
+  firstNameFile.open("first.txt");
+  lastNameFile.open("last.txt");
   char name[20];
-  if (myReadFile.is_open()) {
-    while (!myReadFile.eof()) {
-      myReadFile >> name;
-      cout << name;
+
+  Student* newStudent = new Student();
+
+  int randomLine = 15;
+  
+  if(firstNameFile.is_open() == true) {
+    for(int a = 0; a < 20; a++) {
+      if(a != randomLine){
+        firstNameFile >> name; 
+      } else {
+        strcpy(newStudent->getFirstName(), name);
+      }
     }
   }
-  myReadFile.close();
+  if(lastNameFile.is_open() == true) {
+    for(int b = 0; b < 20; b++) {
+      if(b != randomLine){
+        lastNameFile >> name; 
+      } else {
+        strcpy(newStudent->getLastName(), name);
+      }
+    }
+  }
+  newStudent->printStudent();
+  firstNameFile.close();
+  lastNameFile.close();
 }
