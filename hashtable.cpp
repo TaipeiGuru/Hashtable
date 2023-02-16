@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <cstring>
+#include <fstream>
 #include "node.h"
 #include "student.h"
 
@@ -188,6 +189,16 @@ bool collisionChecker(Node** list, int hashFunctionValue) {
   return false;
 }
 
+// File-reading help from https://cplusplus.com/forum/beginner/8388/
 void generateRandom(Node** &myList, int listSize, int studentNum) {
-  
+  ifstream myReadFile;
+  myReadFile.open("first.txt");
+  char name[20];
+  if (myReadFile.is_open()) {
+    while (!myReadFile.eof()) {
+      myReadFile >> name;
+      cout << name;
+    }
+  }
+  myReadFile.close();
 }
