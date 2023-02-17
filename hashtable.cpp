@@ -1,4 +1,4 @@
-// This is a Hashtable that's used to store student information. Last modified by Jason Randolph on 2-17-13.
+// This is a Hashtable that's used to store student information. All other files are the same as in LinkedLists2. Last modified by Jason Randolph on 2-17-13.
 // Imports
 #include <iostream>
 #include <cstring>
@@ -101,10 +101,17 @@ int main() {
         Node* headNode = list[hash];
         deleteStudent(list, headNode, hash, deleteID);
       }
+
+    // If input is print, printStudent
     } else if(strcmp(input, "PRINT") == 0){
       printStudent(list, listSize);
+	    
+    // If input is QUIT, end the while loop
     } else if(strcmp(input, "QUIT") == 0){
       active = false;
+      
+    /* If input is random, ask for the number of students and then call the generator function. Also update listSize in case collisions occur
+     * during random generation */
     } else if(strcmp(input, "RANDOM") == 0){
       int studentNum; 
       cout << "How many students would you like to generate?" << endl;
@@ -117,6 +124,8 @@ int main() {
   return 0;
 }
 
+/* Add student function. If the index of the student's hash is empty, make a new node containing that student and insert it. If not, 
+ * check the next two linked nodes to see if any exist. If not, put the new student there. */
 void addStudent(Node** myList, int hashFunctionValue, Student* newStudent) {
   if(myList[hashFunctionValue] == NULL) {
     Node* tempNode = new Node(newStudent);
@@ -130,6 +139,8 @@ void addStudent(Node** myList, int hashFunctionValue, Student* newStudent) {
   }  
 }
 
+/* Rehash function. If the index in the old array isn't empty, copy it to a new node, hash the student at that node, and add the student
+ * to the new array. Then, change the node to its next node to account for any chained students. Help on this from Vatsal Parikh */
 void reHash(int listSize, int newListSize, Node** &list, Node** temp) {
   int hash;
   for (int i = 0; i < listSize; i++) {
@@ -142,15 +153,19 @@ void reHash(int listSize, int newListSize, Node** &list, Node** temp) {
       }
     }
   }
+  
+  // Delete the old list and set list equal to the new array
   delete[] list;
   list = temp;
 }
 
+// Hash function, uses modulo. ID modulo listSize is returned
 int hashFunction(int id, int listSize) {
   int value = id % listSize;
   return value;
 }
 
+// Print student function. For each slot in the array, check for the existence of nodes (and chained nodes). If there are any, get the student and print. 
 void printStudent(Node** myList, int listSize) {
   for(int i = 0; i<listSize; i++) {
     if(myList[i] != NULL) {
@@ -165,33 +180,45 @@ void printStudent(Node** myList, int listSize) {
   } 
 }
 
+// Delete student function. Virtually the same as that of LinkedLists 2
 void deleteStudent(Node** &myList, Node* headNode, int hashFunctionValue, int myID) { 
+  
+  // If there's only one node at that index, the node is deleted and that index is set to NULL
   if(headNode->getStudent()->getID() == myID && headNode->getNext() == NULL) {
     delete headNode;
     myList[hashFunctionValue] = NULL;
     cout << "Student deleted." << endl;
+    
+  // If there are three nodes at that index and the middle one matches the ID, set the headNode's next to the third node and delete the second
   } else if (headNode->getNext()->getStudent()->getID() == myID && headNode->getNext()->getNext() != NULL) {
     Node* tempNode = headNode->getNext();
     headNode->setNext(headNode->getNext()->getNext());
     delete tempNode;
     cout << "Student deleted." << endl;
+    
+  // If there are two nodes at that index and the second one matches the ID, delete the second and set the headNode's next to NULL
   } else if(headNode->getNext()->getStudent()->getID() == myID && headNode->getNext()->getNext() == NULL) {
     Node* tempNode2 = headNode->getNext();
     headNode->setNext(NULL);
     delete tempNode2;
     cout << "Student deleted." << endl;
+    
+  // If there are two nodes at that index and the first one matches the ID, set the second node as the headNode and then delete the first
   } else if (headNode->getStudent()->getID() == myID && headNode->getNext() != NULL) {
     Node* tempNode3 = headNode;
     headNode = headNode->getNext();
     myList[hashFunctionValue] = headNode;
     delete tempNode3;
     cout << "Student deleted." << endl;
+    
+  // Otherwise, use recursion to run through the nodes again
   } else {
     Node* tempNode4 = headNode->getNext();
     deleteStudent(myList, tempNode4, hashFunctionValue, myID);   
   }
 }
 
+// Collision checker function. If there are three nodes at a certain index, return true. Else, return false
 bool collisionChecker(Node** list, int hashFunctionValue) {
   if(list[hashFunctionValue] != NULL) {
     if(list[hashFunctionValue]->getNext() != NULL) {
@@ -203,20 +230,27 @@ bool collisionChecker(Node** list, int hashFunctionValue) {
   return false;
 }
 
-// File-reading help from https://cplusplus.com/forum/beginner/8388/
+// Random student generator. File-reading help from https://cplusplus.com/forum/beginner/8388/
 int generateRandom(Node** &myList, int listSize, int studentNum) {
   for(int k = 0; k < studentNum; k++) {
+    
+    // Create objects for first and last name files
     ifstream firstNameFile;
     ifstream lastNameFile;
+    
+    // Open both files
     firstNameFile.open("first.txt");
     lastNameFile.open("last.txt");
     char name[20];
   
+    // Create a new student
     Student* newStudent = new Student();
     
-    // srand((unsigned) time(NULL));
+    // Generate a random line for each name to be taken from
   	int randomLine = rand() % 20;
     
+    /* If the file is open and the reader reaches the randomly generated line, copy that name into the student's first name slot. 
+     * Otherwise, put that name into a char array and continue on */
     if(firstNameFile.is_open() == true) {
       for(int a = 0; a < 20; a++) {
         if(a != randomLine){
@@ -227,6 +261,7 @@ int generateRandom(Node** &myList, int listSize, int studentNum) {
       }
     }
     
+    // Repeat the above for last name
     randomLine = rand() % 20;
     if(lastNameFile.is_open() == true) {
       for(int b = 0; b < 20; b++) {
@@ -237,32 +272,49 @@ int generateRandom(Node** &myList, int listSize, int studentNum) {
         }
       }
     }
+    
+    // Close both files
     firstNameFile.close();
     lastNameFile.close();
   
     // Help with random number generator from https://www.digitalocean.com/community/tutorials/random-number-generator-c-plus-plus
-  	// srand((unsigned) time(NULL));
   	float gpa = rand() % 500;
     gpa = gpa / 100;
     newStudent->setGPA(gpa);
   
+    // ID generation. Starts at 100000 and adds k with each iteration, causing the ID to be incremented by 1 for each student
     int id = 100000 + k;
     bool idExists = true;
+    
+    // Initialize counter
     int idMatches;
-    // Thanks to Vatsal Parikh for helping with NULL logic
+    
+    // This checks to see if a randomly generated ID already exists in the Hashtable. Thanks to Vatsal Parikh for helping with NULL logic
     while(idExists == true) {
+      
+      // Set counter to 0
       idMatches = 0;
+      
+      // For each index in the array...
       for(int i = 0; i < listSize; i++) {
+        
+        // If that spot isn't NULL and the ID matches, increment the counter
         if(myList[i] != NULL && myList[i]->getStudent()->getID() == id) {
           idMatches++;
         }
+        
+        // If that spot isn't NULL, the second node isn't NULL, and the second node's ID matches, increment the counter
         if(myList[i] != NULL && myList[i]->getNext() != NULL && myList[i]->getNext()->getStudent()->getID() == id) {
           idMatches++;
         }
+        
+        // If that spot isn't NULL, the second node isn't NULL, the third isn't NULL, and the third node's ID matches, increment the counter
         if(myList[i] != NULL && myList[i]->getNext() != NULL && myList[i]->getNext()->getNext() != NULL && myList[i]->getNext()->getNext()->getStudent()->getID() == id) {
           idMatches++; 
         }
       }
+      
+      // If the counter is equal to 0 (indicating that the ID doesn't already exist), end the while loop. Otherwise, increment the ID by one and try again
       if(idMatches == 0) {
           idExists = false;
       } else {
@@ -271,6 +323,7 @@ int generateRandom(Node** &myList, int listSize, int studentNum) {
     }
     newStudent->setID(id);
       
+    // Create a hash for the ID and check for collisions. Collision logic is the same as above when we were adding new students
     int hash = hashFunction(id, listSize);
     if(collisionChecker(myList, hash) == true) {
       int newListSize = listSize * 2;
@@ -286,5 +339,7 @@ int generateRandom(Node** &myList, int listSize, int studentNum) {
       addStudent(myList, hash, newStudent);
     }
   }
+  
+  // List size is returned since the listSize is stored in main and will need to be updated if any collisions occur in this scope 
   return listSize;
 }
