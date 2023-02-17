@@ -117,6 +117,8 @@ int main() {
       cout << "How many students would you like to generate?" << endl;
       cin >> studentNum;
       listSize = generateRandom(list, listSize, studentNum);
+    } else if(strcmp(input, "NIVIDH") == 0){
+      cout << "Greetings, Cambodian rizzler!" << endl;
     } else {
       cout << "Invalid input." << endl;
     }
@@ -232,6 +234,9 @@ bool collisionChecker(Node** list, int hashFunctionValue) {
 
 // Random student generator. File-reading help from https://cplusplus.com/forum/beginner/8388/
 int generateRandom(Node** &myList, int listSize, int studentNum) {
+  // Generate seed. Help with this from Galbraith
+  srand(time(NULL));
+  
   for(int k = 0; k < studentNum; k++) {
     
     // Create objects for first and last name files
@@ -245,10 +250,9 @@ int generateRandom(Node** &myList, int listSize, int studentNum) {
   
     // Create a new student
     Student* newStudent = new Student();
-    
-    // Generate a random line for each name to be taken from
-  	int randomLine = rand() % 20;
-    
+
+    // Initialize random line
+    int randomLine = rand() % 20;
     /* If the file is open and the reader reaches the randomly generated line, copy that name into the student's first name slot. 
      * Otherwise, put that name into a char array and continue on */
     if(firstNameFile.is_open() == true) {
@@ -262,10 +266,10 @@ int generateRandom(Node** &myList, int listSize, int studentNum) {
     }
     
     // Repeat the above for last name
-    randomLine = rand() % 20;
+    int randomLine2 = rand() % 20;
     if(lastNameFile.is_open() == true) {
       for(int b = 0; b < 20; b++) {
-        if(b != randomLine){
+        if(b != randomLine2){
           lastNameFile >> name; 
         } else {
           strcpy(newStudent->getLastName(), name);
